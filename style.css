@@ -1,0 +1,124 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Arial', sans-serif;
+  font-size: 16px;
+  color: #333;
+}
+
+.meteo-card-loader {
+  display: none;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loader {
+  font-size: 20px;
+}
+
+.loader-item {
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+  border: 2px solid #64b0e6;
+  border-top: 2px solid transparent;
+  animation: spin 1s linear infinite;
+}
+
+.meteo-container {
+  width: 100%;
+  height: 100vh;
+  background: radial-gradient(#ffff74 0%, #64b0e6 65%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.meteo-card {
+  display: flex;
+  opacity: 0;
+  width: 320px;
+  height: 240px;
+  background-color: rgba(255, 255, 255, 0.3);
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  padding: 20px;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+  transition: opacity 0.8s ease-in-out;
+}
+
+@media screen and (min-width: 321px) {
+  .meteo-card {
+    border-radius: 14px;
+  }
+}
+
+.meteo-card-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 12px;
+  gap: 8px;
+}
+
+.meteo-card-header .town-date, .meteo-card-header span {
+  font-size: 12px;
+}
+
+.meteo-card-header h1, .meteo-card-header .town-name {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.town-name {
+  display: inline-block;
+  text-align: center;
+}
+
+.meteo-card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.town-temperature {
+  font-size: 28px;
+  font-weight: bold;
+  background-color: rgb(255, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 4px 8px;
+}
+
+.town-infos {
+  display: grid;
+  grid-template-columns: 1fr 0.1fr 1fr;
+  justify-items: center;
+  align-items: center;
+  height: 52px;
+}
+
+.error-message {
+  display: none;
+  background-color: rgba(230, 100, 101, 0.7);
+  border-radius: 14px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  padding: 20px;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.error-message p {
+  color: white;
+  font-size: 16px;
+}

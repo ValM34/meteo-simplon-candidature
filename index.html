@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>Météo</title>
+</head>
+<body>
+  <section class="meteo-container">
+    <div class="meteo-card-loader" id="meteo_card_loader">
+      <div class="loader">
+        <div class="loader-item"></div>
+      </div>
+    </div>
+    <div class="meteo-card" id="meteo_card">
+      <div class="meteo-card-header">
+        <h1><span class="town-name" id="town_name"></span></h1>
+        <p class="town-date"><span id="town_date"></span> - <span id="town_hour"></span></p>
+      </div>
+      <div class="meteo-card-body">
+        <b class="town-temperature" id="town_temperature"></b>
+      </div>
+      <div class="meteo-card-footer">
+        <div class="town-infos">
+          <p>Humidité : <span id="town_humidity"></span>%</p>
+          <div>|</div>
+          <p>Vent : <span id="town_wind_speed"></span>km/h</p>
+        </div>
+      </div>
+    </div>
+    <div class="error-message" id="error_message">
+      <p>Une erreur est survenue lors de la récupération des données</p>
+    </div>
+  </section>
+  <script src="meteo.js" type="module"></script>
+</body>
+</html>
