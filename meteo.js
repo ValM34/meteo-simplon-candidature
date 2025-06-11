@@ -92,16 +92,12 @@ async function init() {
 function getTimeUntilNextHour() {
   const date = new Date();
   const nextHourDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours() + 1, 0, 0);
-  console.log(nextHourDate);
-  console.log(date);
   return nextHourDate - date;
 }
 
 async function updateDataEachHour() {
-    console.log('Démarrage de la mise à jour horaire');
     await init();
     await new Promise(resolve => setTimeout(resolve, getTimeUntilNextHour()));
-    console.log('mise à jour terminee')
 }
 
 updateDataEachHour();
