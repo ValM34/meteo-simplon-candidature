@@ -65,7 +65,7 @@ async function init() {
 
   document.querySelector('#town_name').textContent = townConfiguration.ville;
   document.querySelector('#town_date').textContent = date.toLocaleDateString();
-  document.querySelector('#town_hour').textContent = hour;
+  document.querySelector('#town_hour').textContent = hour + ":" + (minutes < 10 ? "0" + minutes : minutes);
   document.querySelector('#town_temperature').textContent = weatherData.hourly.temperature_2m[hour] + "°C";
   document.querySelector('#town_humidity').textContent = weatherData.hourly.relative_humidity_2m[hour];
   document.querySelector('#town_wind_speed').textContent = weatherData.hourly.wind_speed_10m[hour];
@@ -105,8 +105,12 @@ function getTimeUntilNextHour() {
 }
 
 async function updateDataEachHour() {
+  while(true) {
+    console.log('Démarrage de la mise à jour horaire');
     await init();
     await new Promise(resolve => setTimeout(resolve, getTimeUntilNextHour()));
+    console.log('mise à jour terminee');
+  }
 }
 
 updateDataEachHour();
