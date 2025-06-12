@@ -2,35 +2,44 @@ async function init() {
   handleMeteoCardState("loading");
 
   // FETCH DATA
-  async function fetchTownName() {
-    const townName = await fetch(`./conf.json`)
+  async function fetchTownConfiguration() {
+    const townConfiguration = await fetch(`./conf.json`)
       .then((response) => response.json())
-      .then((data) => data.ville)
+      .then((data) => data)
       .catch((error) => {
         console.error("Erreur interne :", error);
       });
 
-    return townName;
+    return townConfiguration;
   }
-  let townName = await fetchTownName();
-  if(!townName) {
+  let townConfiguration = await fetchTownConfiguration();
+  if(!townConfiguration) {
     handleMeteoCardState("error");
   }
 
-  async function fetchTownData() {
-    const townData = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${townName}&count=1&language=fr&format=json`)
+  async function fetchTownDataList() {
+    const townDataList = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${townConfiguration.ville}&count=13&language=fr&format=json`)
       .then((response) => response.json())
-      .then((data) => data.results[0])
+      .then((data) => data.results)
       .catch((error) => {
         console.error("Erreur lors de la récupération des données de la ville :", error);
       });
-
-    return townData;
+    return townDataList;
   }
-  let townData = await fetchTownData();
-  if(!townData) {
+  let townDataList = await fetchTownDataList();
+  if(!townDataList) {
     handleMeteoCardState("error");
   }
+
+  // Filter town data list by postal code
+  const townData = townDataList.find(townData => {
+    const townPostCodesList = townData.postcodes;
+    if (!townPostCodesList) {
+      return false;
+    }
+    const townPostCode = townPostCodesList.find(townPostCode => townPostCode === townConfiguration.code_postal);
+    return townPostCode === townConfiguration.code_postal
+  })
 
   async function fetchWeatherData() {
     const weatherData = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${townData.latitude}&longitude=${townData.longitude}&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,&models=meteofrance_seamless`)
@@ -54,7 +63,7 @@ async function init() {
   const hour = date.getHours();
   const minutes = date.getMinutes();
 
-  document.querySelector('#town_name').textContent = townName;
+  document.querySelector('#town_name').textContent = townConfiguration.ville;
   document.querySelector('#town_date').textContent = date.toLocaleDateString();
   document.querySelector('#town_hour').textContent = hour;
   document.querySelector('#town_temperature').textContent = weatherData.hourly.temperature_2m[hour] + "°C";
@@ -70,18 +79,18 @@ async function init() {
   }
 
   function handleMeteoCardState(state) {
-    if(state == "loading") {
+    if(state === "loading") {
       document.querySelector('#meteo_card_loader').style.display = "flex";
       document.querySelector('#meteo_card').style.display = "none";
       document.querySelector('#error_message').style.display = "none";
-    } else if(state == "success") {
+    } else if(state === "success") {
       document.querySelector('#meteo_card_loader').style.display = "none";
       document.querySelector('#meteo_card').style.display = "flex";
       setTimeout(() => {
         document.querySelector('#meteo_card').style.opacity = "1";
       }, 100);
       document.querySelector('#error_message').style.display = "none";
-    } else if(state == "error") {
+    } else if(state === "error") {
       document.querySelector('#meteo_card_loader').style.display = "none";
       document.querySelector('#meteo_card').style.display = "none";
       document.querySelector('#error_message').style.display = "block";
